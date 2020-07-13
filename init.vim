@@ -1,23 +1,36 @@
 call plug#begin('~/.vim/plugged')
 
 Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
-Plug 'zchee/deoplete-go', { 'do': 'make'}
-Plug 'zchee/deoplete-jedi'
 Plug 'tpope/vim-abolish'
+" Repeat Stuff
 Plug 'tpope/vim-repeat'
+" Surround
 Plug 'tpope/vim-surround'
 " Plug 'Valloric/YouCompleteMe'
 Plug 'itchyny/lightline.vim'
+" AutoCompletion
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
+" Smooth Scrolling
+Plug 'psliwka/vim-smoothie'
+" Pretty StartUp Page
+Plug 'mhinz/vim-startify'
+" AutoGenerate Tags when writing HTML
 Plug 'mattn/emmet-vim'
+" NERDTree Git Plugin
+Plug 'scrooloose/nerdtree'
+Plug 'Xuyuanp/nerdtree-git-plugin'
+
+" NerdCommenter Plugin
+Plug 'preservim/nerdcommenter'
+
+Plug 'jiangmiao/auto-pairs'
+
 Plug 'w0rp/ale'
 Plug 'mcchrish/nnn.vim'
 Plug 'Raimondi/delimitMate'
 Plug 'sheerun/vim-polyglot'
-
 " Test Coverage PlugIns
 Plug 'buoto/gotests-vim'
-
 " Colorschemes
 Plug 'NLKNguyen/papercolor-theme'
 Plug 'altercation/vim-colors-solarized'
@@ -61,14 +74,11 @@ set signcolumn=yes
 set tabstop=4
 set title                         " let vim set the terminal title
 set updatetime=10
+set clipboard+=unnamedplus
 " set wrap                          " wordwrap bitches
 "----------------------------------------------
 " Colors/Misc
 "----------------------------------------------
-if (has("nvim"))
-  "For Neovim 0.1.3 and 0.1.4 < https://github.com/neovim/neovim/pull/2198 >
-  let $NVIM_TUI_ENABLE_TRUE_COLOR=1
-endif
 
 "For Neovim > 0.1.5 and Vim > patch 7.4.1799 < https://github.com/vim/vim/commit/61be73bb0f965a895bfb064ea3e55476ac175162 >
 "Based on Vim patch 7.4.1770 (`guicolors` option) < https://github.com/vim/vim/commit/8a633e3427b47286869aa4b96f2bfc1fe65b25cd >
@@ -106,6 +116,8 @@ inoremap jj <Esc>
 map nt :NERDTree<Enter>
 map gt <C-]>
 map gb <C-t>
+map cc \cc 
+map ucc \cu
 
 " Toggle test coverage ON and OFF
 autocmd FileType go nmap <Leader>c <Plug>(go-coverage-toggle)
@@ -113,6 +125,54 @@ autocmd FileType go nmap <Leader>c <Plug>(go-coverage-toggle)
 " Add Newlines to file
 nnoremap <silent> <leader>o :<C-u>call append(line("."),   repeat([""], v:count1))<CR>
 nnoremap <silent> <leader>O :<C-u>call append(line(".")-1, repeat([""], v:count1))<CR>
+
+" " Copy to clipboard
+vnoremap <silent> <leader>y  "+y
+nnoremap <silent> <leader>Y  "+yg_
+nnoremap <silent> <leader>y  "+y
+nnoremap <silent> <leader>yy  "+yy
+
+" " Paste from clipboard
+nnoremap <silent> <leader>p "+p
+nnoremap <silent> <leader>P "+P
+vnoremap <silent> <leader>p "+p
+vnoremap <silent> <leader>P "+P
+
+let g:python3_host_prog = '/usr/bin/python3'
+
+"----------------------------------------------
+" Plugin: Xuyuanp/nerdtree-git-plugin
+"----------------------------------------------
+let g:NERDTreeIndicatorMapCustom = {
+    \ "Modified"  : "✹",
+    \ "Staged"    : "✚",
+    \ "Untracked" : "✭",
+    \ "Renamed"   : "➜",
+    \ "Unmerged"  : "═",
+    \ "Deleted"   : "✖",
+    \ "Dirty"     : "✗",
+    \ "Clean"     : "✔︎",
+    \ "Unknown"   : "?"
+    \ }
+
+"---------------------------------------------
+" Plugin: fatih/vim-go
+"----------------------------------------------
+let g:go_highlight_build_constraints = 1
+let g:go_highlight_extra_types = 1
+let g:go_highlight_fields = 1
+let g:go_highlight_functions = 1
+let g:go_highlight_methods = 1
+let g:go_highlight_operators = 1
+let g:go_highlight_structs = 1
+let g:go_highlight_types = 1
+let g:go_auto_sameids = 1
+let g:go_fmt_command = "goimports"
+let g:go_auto_type_info = 1
+let g:go_addtags_transform = "snakecase"
+au FileType go nmap <F7> :GoAddTags json<cr>
+au FileType go nmap <F9> :GoCoverageToggle -short<cr>
+au FileType go nmap <F12> <Plug>(go-def)
 "---------------------------------------------
 " Plugin: delimitMate
 "----------------------------------------------
@@ -123,21 +183,74 @@ let delimitMate_expand_cr = 1
 "----------------------------------------------
 let g:gotests_bin = '/home/devinfrancis/go/bin/gotests'
 
+
+let g:startify_custom_header= [
+            \ '                                                             `.--://++++++++///::-.`                                    ',
+            \ '                                                   `.:/+syhdmmmmmmmmmmmmmmmmmmmmmmmmmdhyo+:.                            ',
+            \ '                                              `:+shddmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmddyo/.                       ',
+            \ '                                          `:ohdmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmdddddmmmmmmdho-      .--:-.`       ',
+            \ '                           `.::::-.    `/ydmmmmdhyysssyydmmmmmmmmmmmmmmmmmmmmmmhsssssyyyyssssshmmmmdh+..shdddddddy/.    ',
+            \ '                        `/ydddmmmddh--sdmmmdsssshdmmmmmdysssymmmmmmmmmmmmmmmhooymNMMMmdmNMMMNmyosmmmmmds/ymmmmmmmmmdo`  ',
+            \ '                      `+dmmmmmmmmms/ydmmmyosdNMMMMMdyyhNMMMNhosdmmmmmmmmmmdosmMMMMMh-```.oNMMMMNh/hmmmmmdo/++oymmmmmmy` ',
+            \ '                     `ymmmmdsooyh/sdmmmd+yNMMMMMMm-`   .oMMMMMd/hmmmmmmmmh/dMMMMMMd`      oMMMMMMN/ymmmmmmh-  `ommmmmms ',
+            \ '                     smmmmy.    :hmmmmd/dMMMMMMMM:       dMMMMMN/hmmmmmmh:NMMMMMMMd   /-  +MMMMMMMN:dmmmmmmd/  :mmmmmmm ',
+            \ '                     dmmmm/    :dmmmmm/dMMMMMMMMM/  -o` `mMMMMMMm:mmmmmm/dMMMMMMMMMs.`y+`/NMMMMMMMMsommmmmmmd+-dmmmmmmh ',
+            \ '                     ymmmmd/. :dmmmmmd:MMMMMMMMMMNo-/y-:dMMMMMMMM:dmmmmm.MMMMMMMMMMMNdhdmMMMMMMMMMMd/mmmmmmmmd:ymmmmmd- ',
+            \ '                     .hmmmmms-dmmmmmmh/MMMMMMMMMMMMNmmmMMMMMMMMMM/hmmmmm.MMMMMMMMMMMMMMMMMMMMMMMMMMh/mmmmmmmmmh-dmmds.  ',
+            \ '                      `+hmmd-hmmmmmmmd-MMMMMMMMMMMMMMMMMMMMMMMMMM-dmmmmmosMMMMMMMMMMMMMMMMMMMMMMMMM/ymmmmmmmmmmo+s/.    ',
+            \ '                        `-+/+mmmmmmmmm+yMMMMMMMMMMMMMMMMMMMMMMMMsommmmmmd/hMMMMMMMMMMMMMMMMMMMMMMNoommmmmmmmmmmd.       ',
+            \ '                           `dmmmmmmmmmd/hMMMMMMMMMMMMMMMMMMMMMNs+mmmmdddddosmMMMMMMMMMMMMMMMMMMMd+smmmmmmmmmmmmmo       ',
+            \ '                           +mmmmmmmmmmmdoomMMMMMMMMMMMMMMMMMNh+ymdy+:-.--:ososdNMMMMMMMMMMMMNmhosdmmmmmmmmmmmmmmd`      ',
+            \ '                           hmmmmmmmmmmmmmhsohmNMMMMMMMMMNmdsoydmh-         `ydyssyhddmmddhyssshmmmmmmmmmmmmmmmmmm/      ',
+            \ '                          `mmmmmmmmmmmmmmmmdyysssyyyyysssyydmdhs:          `:yhmmdhyyyyyyhdmmmmmmmmmmmmmmmmmmmmmmy      ',
+            \ '                          :mmmmmmmmmmmmmmmmmmmmmmdddddmmmmmmy/oyh+-.```..:+yhyo+ydmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmd      ',
+            \ '                          /mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmh-hdddddddhhdddddddddo/dmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm-     ',
+            \ '                          +mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmo/dddddddddddddddddddd:ymmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm/     ',
+            \ '                          ommmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmd:shhhhyoo+-sooshhddho/dmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmo     ',
+            \ '                          ommmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmyo:oydNMh-MMMm+:oooymmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmms     ',
+            \ '                          +mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm-mMMMMs/MMMMh+mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmy     ',
+            \ '                          +mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm+yMMMMs/MMMMd/mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmh     ',
+            \ '                          :mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmd:dMMd/:dMMMoommmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmd     ',
+            \ '                          -mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmdsoosmdsoooymmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmd ',
+            \ '                                                                                  ▟▙            ',
+            \ '                                                                                  ▝▘            ',
+            \ '                                          ██▃▅▇█▆▖  ▗▟████▙▖   ▄████▄   ██▄  ▄██  ██  ▗▟█▆▄▄▆█▙▖',
+            \ '                                          ██▛▔ ▝██  ██▄▄▄▄██  ██▛▔▔▜██  ▝██  ██▘  ██  ██▛▜██▛▜██',
+            \ '                                          ██    ██  ██▀▀▀▀▀▘  ██▖  ▗██   ▜█▙▟█▛   ██  ██  ██  ██',
+            \ '                                          ██    ██  ▜█▙▄▄▄▟▊  ▀██▙▟██▀   ▝████▘   ██  ██  ██  ██',
+            \ '                                          ▀▀    ▀▀   ▝▀▀▀▀▀     ▀▀▀▀       ▀▀     ▀▀  ▀▀  ▀▀  ▀▀',
+            \ '',
+            \ ]
+
+
+
+
+
 "----------------------------------------------
 " Plugin: itchyny/lightline.vim
 "----------------------------------------------
 let g:lightline = {
-        \ 'colorscheme': 'powerline',
+        \ 'colorscheme': 'srcery_drk',
         \ }
 
-"----------------------------------------------
-" Plugin: zchee/deoplete-go
-"----------------------------------------------
+" "----------------------------------------------
+" " Plugin: zchee/deoplete-go
+" "----------------------------------------------
+let g:deoplete#enable_at_startup = 1
+
 " Enable completing of go pointers
-let g:deoplete#sources#go#pointer = 1
+let g:deoplete#sources#go#pointer = 1 
 
 " Enable autocomplete of unimported packages
 let g:deoplete#sources#go#unimported_packages = 0 
+
+"----------------------------------------------
+" Plugin: w0rp/ale
+"----------------------------------------------
+let g:ale_sign_error = '⤫'
+let g:ale_sign_warning = '⚠'" Enable integration with airline.
+let g:airline#extensions#ale#enabled = 1
+let g:ale_lint_on_text_changed = "never"
 
 "----------------------------------------------
 " Plugin: tpope/vim-markdown
@@ -150,7 +263,7 @@ let g:markdown_minlines = 100
 " Plugin: mattn/emmet-vim
 "----------------------------------------------
 let g:user_emmet_install_global = 0
-autocmd FileType, html,css EmmetInstall
+autocmd FileType, html,htmldjango,css EmmetInstall
 
 "----------------------------------------------
 " Plugin: neoclide/coc.nvim
@@ -237,9 +350,6 @@ let g:go_highlight_structs = 1
 let g:go_highlight_operators = 1
 let g:go_highlight_build_constraints = 1
 let g:go_highlight_extra_types = 1
-
-let g:go_def_mode='gopls'
-let g:go_info_mode='gopls'
 
 " Show the progress when running :GoCoverage
 let g:go_echo_command_info = 1
