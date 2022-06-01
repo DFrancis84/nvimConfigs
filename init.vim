@@ -29,6 +29,9 @@ Plug 'w0rp/ale'
 Plug 'mcchrish/nnn.vim'
 Plug 'Raimondi/delimitMate'
 Plug 'sheerun/vim-polyglot'
+" Svelte Syntax Plugin
+Plug 'leafOfTree/vim-svelte-plugin'
+
 " Test Coverage PlugIns
 Plug 'buoto/gotests-vim'
 " Colorschemes
@@ -75,6 +78,7 @@ set tabstop=4
 set title                         " let vim set the terminal title
 set updatetime=10
 set clipboard+=unnamedplus
+set mouse=a                       " enable mouse use
 " set wrap                          " wordwrap bitches
 "----------------------------------------------
 " Colors/Misc
@@ -143,7 +147,7 @@ let g:python3_host_prog = '/usr/bin/python3'
 "----------------------------------------------
 " Plugin: Xuyuanp/nerdtree-git-plugin
 "----------------------------------------------
-let g:NERDTreeIndicatorMapCustom = {
+let g:NERDTreeGitStatusIndicatorMapCustom = {
     \ "Modified"  : "✹",
     \ "Staged"    : "✚",
     \ "Untracked" : "✭",
@@ -299,6 +303,11 @@ nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
 
 "----------------------------------------------
+" Plugin: leafOfTree/vim-svelte-plugin
+"----------------------------------------------
+let g:vim_svelte_plugin_load_full_syntax = 1
+
+"----------------------------------------------
 " Plugin: mcchrish/nnn.vim
 "----------------------------------------------
 "" Disable default mappings
@@ -413,3 +422,9 @@ let g:neomake_go_gometalinter_maker = {
 "---------------------------------------------------
 let g:ycm_keep_logfiles = 1
 let g:ycm_log_level = 'debug'
+
+augroup LuaHighlight
+  autocmd!
+  autocmd TextYankPost * silent! lua require'vim.highlight'.on_yank()
+augroup END
+
