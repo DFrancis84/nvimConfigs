@@ -1,4 +1,4 @@
-call plug#begin('~/.vim/plugged')
+call plug#begin()
 
 Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 Plug 'tpope/vim-abolish'
@@ -6,7 +6,7 @@ Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-repeat'
 " Surround
 Plug 'tpope/vim-surround'
-" Plug 'Valloric/YouCompleteMe'
+"Plug 'Valloric/YouCompleteMe'
 Plug 'itchyny/lightline.vim'
 " AutoCompletion
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
@@ -26,12 +26,10 @@ Plug 'preservim/nerdcommenter'
 Plug 'jiangmiao/auto-pairs'
 
 Plug 'w0rp/ale'
+"Plug 'dense-analysis/ale'
 Plug 'mcchrish/nnn.vim'
 Plug 'Raimondi/delimitMate'
 Plug 'sheerun/vim-polyglot'
-" Svelte Syntax Plugin
-Plug 'leafOfTree/vim-svelte-plugin'
-
 " Test Coverage PlugIns
 Plug 'buoto/gotests-vim'
 " Colorschemes
@@ -68,7 +66,7 @@ set nowrap
 set noerrorbells                  " No bells!
 set novisualbell                  " I said, no bells!
 set number                        " show number ruler
-set relativenumber                " show relative numbers in the ruler
+"set relativenumber                " show relative numbers in the ruler
 set ruler
 set formatoptions=tcqronj         " set vims text formatting options
 set softtabstop=4
@@ -78,7 +76,6 @@ set tabstop=4
 set title                         " let vim set the terminal title
 set updatetime=10
 set clipboard+=unnamedplus
-set mouse=a                       " enable mouse use
 " set wrap                          " wordwrap bitches
 "----------------------------------------------
 " Colors/Misc
@@ -87,9 +84,9 @@ set mouse=a                       " enable mouse use
 "For Neovim > 0.1.5 and Vim > patch 7.4.1799 < https://github.com/vim/vim/commit/61be73bb0f965a895bfb064ea3e55476ac175162 >
 "Based on Vim patch 7.4.1770 (`guicolors` option) < https://github.com/vim/vim/commit/8a633e3427b47286869aa4b96f2bfc1fe65b25cd >
 " < https://github.com/neovim/neovim/wiki/Following-HEAD#20160511 >
-if (has("termguicolors"))
-  set termguicolors
-endif
+"if (has("termguicolors"))
+  "set termguicolors
+"endif
 
 set background=dark
 
@@ -144,6 +141,7 @@ vnoremap <silent> <leader>P "+P
 
 let g:python3_host_prog = '/usr/bin/python3'
 
+autocmd FileType nerdtree setlocal winfixwidth
 "----------------------------------------------
 " Plugin: Xuyuanp/nerdtree-git-plugin
 "----------------------------------------------
@@ -255,6 +253,7 @@ let g:ale_sign_error = '⤫'
 let g:ale_sign_warning = '⚠'" Enable integration with airline.
 let g:airline#extensions#ale#enabled = 1
 let g:ale_lint_on_text_changed = "never"
+"let g:ale_use_neovim_diagnostics_api = 1
 
 "----------------------------------------------
 " Plugin: tpope/vim-markdown
@@ -267,7 +266,7 @@ let g:markdown_minlines = 100
 " Plugin: mattn/emmet-vim
 "----------------------------------------------
 let g:user_emmet_install_global = 0
-autocmd FileType, html,htmldjango,css EmmetInstall
+autocmd FileType, html,css EmmetInstall
 
 "----------------------------------------------
 " Plugin: neoclide/coc.nvim
@@ -285,6 +284,8 @@ function! s:check_back_space() abort
   return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
 
+let g:coc_disable_startup_warning = 1
+
 " Use <c-space> to trigger completion.
 inoremap <silent><expr> <c-space> coc#refresh()
 
@@ -301,11 +302,6 @@ nmap <silent> gd <Plug>(coc-definition)
 nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
-
-"----------------------------------------------
-" Plugin: leafOfTree/vim-svelte-plugin
-"----------------------------------------------
-let g:vim_svelte_plugin_load_full_syntax = 1
 
 "----------------------------------------------
 " Plugin: mcchrish/nnn.vim
@@ -423,8 +419,7 @@ let g:neomake_go_gometalinter_maker = {
 let g:ycm_keep_logfiles = 1
 let g:ycm_log_level = 'debug'
 
-augroup LuaHighlight
-  autocmd!
-  autocmd TextYankPost * silent! lua require'vim.highlight'.on_yank()
-augroup END
-
+function! s:check_back_space() abort
+    let col = col('.') - 1
+    return !col || getline('.')[col-1] =~# '\s'
+endfunction
